@@ -12,7 +12,7 @@
 int main()
 {
 	Application app;	// Program application
-	app.Run();			// run program
+	app.Run();			// Run program
 
 	return 0;
 }
