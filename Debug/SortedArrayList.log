@@ -1,0 +1,4 @@
+﻿  FolderType.cpp
+c:\users\김용재\desktop\2019 공부\2019 자료구조\2번째 과제\ds-lab02-sortedlist-solution\ds-lab02-sortedlist-solution\lab02-solution-sample1\foldertype.cpp(8): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\time.h(506): note: 'localtime' 선언을 참조하십시오.
+  SortedArrayList.vcxproj -> C:\Users\김용재\Desktop\2019 공부\2019 자료구조\2번째 과제\DS-Lab02-SortedList-Solution\DS-Lab02-SortedList-Solution\Lab02-solution-sample1\Debug\SortedArrayList.exe
