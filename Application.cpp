@@ -170,9 +170,12 @@ void Application:: DisplayThisfolder()
 	{
 		cur_Folder->DisplayRecordOnScreen();
 	}
-	root.DisplayNameOnScreen();
-	root.DisplayDataOnScreen();
-	root.DisplayFolderNumberOnScreen();
+	else
+	{
+		root.DisplayNameOnScreen();
+		root.DisplayDataOnScreen();
+		root.DisplayFolderNumberOnScreen();
+	}
 }
 
 void Application::DisplayCurrentFolder() 
