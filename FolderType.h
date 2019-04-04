@@ -124,7 +124,7 @@ public:
 	}
 	
 	/**
-	*	@brief	Set folder name.
+	*	@brief	Set folder DATA.
 	*	@pre	none.
 	*	@post	folder name is set.
 	*	@param	inName	folder name.
@@ -133,7 +133,12 @@ public:
 	{
 		data = indata;
 	}
-
+	/**
+	*	@brief	Set folder address.
+	*	@pre	none.
+	*	@post	folder address is set.
+	*	@param	address	folder address.
+	*/
 	void SetAddress(string address)
 	{
 		m_fAddress = address;
@@ -292,8 +297,20 @@ public:
 	*/
 	RelationType CompareByName(const FolderType &data);
 
+	/**
+	*	@brief	폴더를 연다
+	*	@pre	none.
+	*	@post	none
+	*	@return 폴더의 주소값.
+	*/
 	FolderType* Open();
 
+	/**
+	*	@brief	상위폴더를 가르킨다.
+	*	@pre	none.
+	*	@post	none.
+	*	@return 상위폴더의 주소를 리턴.
+	*/
 	FolderType* getParent();
 protected:
 	string mName;					///< file name.

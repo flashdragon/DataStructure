@@ -9,6 +9,7 @@ using namespace std;
 #include "FolderType.h"
 
 #define FILENAMESIZE 1024
+#define MAXFOLDERSIZE 1<<15
 
 /**
 *	application class for item management simply.
@@ -21,6 +22,9 @@ public:
 	*/
 	Application()
 	{
+		front = 0;
+		back = 0;
+		cnt = 0;
 		m_Command = 0;
 		root.SetAddress("root");
 		root.SetName("rootfolder");
@@ -90,17 +94,73 @@ public:
 	*/
 	int DeleteFolder();
 
-	int OpenFolder();
+	/**
+	*	@brief	폴더를 연다.
+	*	@pre	none.
+	*	@post	none.
+	*	@return 폴더의 주소를 리턴.
+	*/
+	FolderType* OpenFolder();
+	
+	/**
+	*	@brief	상위폴더로 간다.
+	*	@pre	none.
+	*	@post	none.
+	*	@return 상위폴더의 주소값을 리턴.
+	*/
 
-	int LatelyFolder();
+	FolderType*	GoToUpFolder();
+	/**
+	*	@brief  큐가 비었는지 확인
+	*	@pre	none.
+	*	@post	none.
+	*	@return 비었으면 1리턴.
+	*/
+	bool isEmpty() 
+	{
+		return !cnt;
+	};
+	/**
+	*	@brief  큐가 꽉찼는지 확인
+	*	@pre	none.
+	*	@post	none.
+	*	@return 꽉찼으면 1리턴.
+	*/
+	bool isFull() 
+	{
+		return cnt == MAXFOLDERSIZE;
+	};
 
-	int	GoToUpFolder();
+	/**
+	*	@brief  큐에 집어넣는다.
+	*	@pre	none.
+	*	@post	큐가 채워진다.
+	*	@pram   temp 집어넣는것.
+	*/
+	void push(FolderType* temp);
+	/**
+	*	@brief  큐에서 뺀다.
+	*	@pre	none.
+	*	@post	큐에서 하나가 사라진다..
+	*/
+	void pop();
+
+	/**
+	*	@brief  최근열어본 폴더를 연다.
+	*	@pre	none.
+	*	@post	none.
+	*/
+	void DisplayCurrentFolder();
 
 private:
 	ifstream m_InFile;		///< input file descriptor.
 	ofstream m_OutFile;		///< output file descriptor.
 	FolderType root;		///< root folder.
 	FolderType* cur_Folder;	///< curent folder.
+	FolderType* queue[MAXFOLDERSIZE]; ///최근 열어본폴더의 주소배열
+	int front;						///큐의 앞
+	int back;				///큐의 뒤
+	int cnt;				///큐의 갯수
 	int m_Command;			///< current command number.
 };
 

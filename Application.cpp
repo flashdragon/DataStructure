@@ -17,19 +17,20 @@ void Application::Run()
 			DeleteFolder();
 			break;
 		case 3:
-			OpenFolder();
+			push(OpenFolder());
 			break;
 		case 4:		//search by name.
 			RetriveFolderByName();
 			break;
 		case 5:
-			LatelyFolder();
+			cout << "\t   --- Current Folder List ---" << endl;
+			DisplayCurrentFolder();
 			break;
 		case 6:		// display all the records in list on screen.
 			DisplayThisfolder();
 			break;
 		case 7:
-			GoToUpFolder();
+			push(GoToUpFolder());
 			break;
 		case 0:
 			return;
@@ -48,8 +49,9 @@ int Application::GetCommand()
 	cout << endl << endl;
 	cout << "\t   Current Path:"<<cur_Folder->GetAddress();
 	cout << endl;
-	cout << "\t   --- Current Folder List ---" << endl;
+	cout << "\t   --- Sub Folder List ---" << endl;
 	DisplaySubfolder();
+	
 	cout << "\t   ---- Menu ---- " << endl;
 	cout << "\t   1 : 폴더 생성" << endl;
 	cout << "\t   2 : 폴더 삭제" << endl;
@@ -98,32 +100,60 @@ int Application::DeleteFolder()
 {
 	return cur_Folder->DeleteFolder();
 }
-
-int Application::OpenFolder()
+///폴더를 연다
+FolderType* Application::OpenFolder()
 {
 	FolderType* temp = cur_Folder->Open();
 	if (temp != 0)
 	{
-		cur_Folder = temp;
-		return 1;
+		return cur_Folder = temp;
 	}
-	return 0;
+	return NULL;
 }
 
-int Application::LatelyFolder()
-{
-	return 0;
-}
-
-int Application::GoToUpFolder()
+///상위폴더에 들어간다.
+FolderType* Application::GoToUpFolder()
 {
 	if (cur_Folder->GetAddress() != "root")
 	{
-		cur_Folder = cur_Folder->getParent();
-		return 1;
+		return cur_Folder = cur_Folder->getParent();
 	}
 	cout << "\t최상위 폴더입니다" << endl;
 	return 0;
+}
+///큐에 넣는다
+void Application::push(FolderType* temp)
+{
+	if (temp == NULL) 
+	{
+		return;
+	}
+    //
+	for (int i = front; i < back; i++)
+	{
+		if (queue[i] == temp)
+		{
+			for (int j = i; j < back; j++)
+			{
+				queue[j] = queue[j + 1];
+			}
+			back--;
+			cnt--;
+			break;
+		}
+	}
+	queue[back] = temp;
+	back++;
+	back %= MAXFOLDERSIZE;
+	cnt++;
+}
+///큐에서 뺀다.
+void Application::pop()
+{
+	cnt--;
+	queue[front] = NULL;
+	front++;
+	front %= MAXFOLDERSIZE;
 }
 
 
@@ -133,7 +163,7 @@ void Application::DisplaySubfolder()
 {
 	cur_Folder->DisplayProperty();
 }
-
+///폴더의 속성을 보여준다.
 void Application:: DisplayThisfolder()
 {
 	if (cur_Folder->GetAddress() != "root")
@@ -143,4 +173,12 @@ void Application:: DisplayThisfolder()
 	root.DisplayNameOnScreen();
 	root.DisplayDataOnScreen();
 	root.DisplayFolderNumberOnScreen();
+}
+
+void Application::DisplayCurrentFolder() 
+{
+	for (int i = back-1; i>=0; i--)
+	{
+		cout << queue[i]->GetName() << endl;
+	}
 }

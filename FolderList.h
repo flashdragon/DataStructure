@@ -97,6 +97,12 @@ public:
 	*/
 	int Delete(T data);
 
+	/**
+	*	@brief	폴더를 열어 들어간다.
+	*	@pre	폴더가 있어야한다.
+	*	@post	none
+	*	@return 오픈한폴더의 주소를 리턴.
+	*/
 	T* Open();
 
 
@@ -145,13 +151,19 @@ int FolderList<T>::Add(T inData)
 
 		while (m_CurPointer <= m_Length) //처음부터 끝까지
 		{
-			if (CurItem.CompareByName(inData) == GREATER || m_CurPointer == m_Length)	//만약 CurItem>inData일경우 혹은 배열의 마지막이라서 비교대상이 없는경우
+			int test = CurItem.CompareByName(inData);
+			if (test == GREATER || m_CurPointer == m_Length)	//만약 CurItem>inData일경우 혹은 배열의 마지막이라서 비교대상이 없는경우
 			{
+				
 				for (int i = m_Length; i > m_CurPointer; i--)	//맨뒤에서 부터 하나씩 땡긴다.
 					m_Array[i] = m_Array[i - 1];	//배열 밀기
 				m_Array[m_CurPointer] = inData;	//배열 밀은 후 현재 포인터에 아이템 넣는다.
 				m_Length++;	//개수 증가
 				break;
+			}
+			else if (test == EQUAL)
+			{
+				return 0;
 			}
 			GetNextItem(CurItem);	//다음아이템으로
 		}

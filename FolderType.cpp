@@ -77,7 +77,7 @@ void FolderType::DisplayProperty()
 {
 	if (subFileNum == 0)
 	{
-		down = new FolderList<FolderType>;
+		return;
 	}
 	FolderType data;
 	// list의 모든 데이터를 화면에 출력
@@ -98,7 +98,7 @@ int FolderType::SearchListByMemberName(FolderType &inData)
 	FolderType tmp;
 	if (subFileNum == 0)
 	{
-		down = new FolderList<FolderType>;
+		return 0;
 	}
 	down->ResetList();//iterator 초기화
 	while (down->GetNextItem(tmp) != -1) //리스트의 마지막까지 반복
