@@ -29,10 +29,10 @@
     <ClInclude Include="Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FolderList.h">
+    <ClInclude Include="FolderType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FolderType.h">
+    <ClInclude Include="FolderLinkedList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

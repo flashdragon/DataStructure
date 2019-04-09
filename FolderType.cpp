@@ -1,5 +1,5 @@
 #include "FolderType.h"
-#include "FolderList.h"
+#include "FolderLinkedList.h"
 void FolderType::GenCreateTime()
 {
 	time_t tt;
@@ -38,7 +38,7 @@ int FolderType::AddFolder()
 	//서브 파일이 없으면 배열을 할당
 	if (subFileNum == 0)
 	{
-		down = new FolderList<FolderType>;
+		down = new FolderLinkedList<FolderType>;
 	}
 	/*getFolderTypeFromkeyboard*/
 	FolderType temp;
@@ -63,12 +63,10 @@ int FolderType::DeleteFolder()
 	if (pre > down->GetLength()) //이전 item개수보다 현재 item개수가 많아지면 제거성공
 	{
 		cout << "<========DELETE SUCCESS !===========>" << endl;
-		this->DisplayProperty(); //모든 파일을 출력한다.
 		return 1;
 	}
 
 	cout << "<========DELETE FAIL !=======>" << endl;
-	this->DisplayProperty();//모든 파일을 출력한다.
 	return 0;
 }
 
@@ -82,13 +80,10 @@ void FolderType::DisplayProperty()
 	FolderType data;
 	// list의 모든 데이터를 화면에 출력
 	down->ResetList();
-	int length = down->GetLength();
-	int curIndex = down->GetNextItem(data);
-	while (curIndex < length && curIndex != -1)
+	while (down->GetNextItem(data)!=NULL)
 	{
 		cout << "\t";
 		data.DisplayNameOnScreen();
-		curIndex = down->GetNextItem(data);
 	}
 }
 
@@ -101,21 +96,16 @@ int FolderType::SearchListByMemberName(FolderType &inData)
 		return 0;
 	}
 	down->ResetList();//iterator 초기화
-	while (down->GetNextItem(tmp) != -1) //리스트의 마지막까지 반복
+	while (down->GetNextItem(tmp) != NULL) //리스트의 마지막까지 반복
 	{
 		if (tmp.GetName().find(inData.GetName()) != -1) //만약 해당 리스트의 이름에 inData의 이름이 존재하면
 		{
-			if (result == 0) //처음 찾는 경우라면
-				cout << "<============I FOUND ITEM !==========>" << endl;
+			
 			tmp.DisplayRecordOnScreen();
 			result = 1;	//성공(1)
 		}
 		tmp.SearchListByMemberName(inData);
 	}
-	if (result)	//발견한 경우
-		cout << "<====================================>" << endl;
-	else	//발견 못하는 경우
-		cout << "<========I CAN'T FIND ITEM !==========>" << endl;
 	return result;
 }
 

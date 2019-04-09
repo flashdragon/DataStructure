@@ -10,7 +10,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include"FolderList.h"
+#include"FolderLinkedList.h"
 using namespace std;
 
 #define FILENAMESIZE 1024
@@ -318,7 +318,7 @@ protected:
 	int data;						///< file data.
 	string date;					///< file date.
 	int subFileNum;					///< file number.
-	FolderList<FolderType>* down;	///< file array.
+	FolderLinkedList<FolderType>* down;	///< file array.
 	FolderType* parent = NULL;
 	int result = 0;
 };

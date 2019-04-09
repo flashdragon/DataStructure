@@ -107,7 +107,7 @@ public:
 
 
 private:
-	T m_Array[MAXSIZE];;		///< list array.
+	T m_Array[MAXSIZE];			///< list array.
 	int m_Length;				///< number of elements in list.
 	int m_CurPointer;			///< iterator pointer.
 };
@@ -163,6 +163,7 @@ int FolderList<T>::Add(T inData)
 			}
 			else if (test == EQUAL)
 			{
+				cout << "\t중복된 이름이 있습니다." << endl;
 				return 0;
 			}
 			GetNextItem(CurItem);	//다음아이템으로
