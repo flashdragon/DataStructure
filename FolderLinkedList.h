@@ -110,12 +110,23 @@ public:
 	int Delete(T data);
 
 	/**
+	*	@brief	이름이 일치하는 파일을 찾아서 해당 파일의 이름을 바꾼다.
+	*	@pre	인수 data에 있는 이름이 list 내에 존재하는 값이어야 한다.
+	*	@post	list 내에 해당 폴더의 이름이 변한다.
+	*	@param	data	바꾸고자 하는 이름이 입력된 FolderType값.
+	*	@return	성공시 1, 실패시 0을 리턴한다.
+	*/
+	int Replace(T data);
+
+	/**
 	*	@brief	폴더를 열어 들어간다.
 	*	@pre	폴더가 있어야한다.
 	*	@post	none
 	*	@return 오픈한폴더의 주소를 리턴.
 	*/
 	T* Open();
+
+	int Openfile(T temp);
 
 
 private:
@@ -183,7 +194,7 @@ int FolderLinkedList<T>::Add(T inData)
 			while (1)
 			{
 				int test = dummy.CompareByName(inData);
-				if (test == GREATER)
+				if (test == 1)
 				{
 					temp-> next = cur_pointer;
 					if (cur_pointer == f_list)
@@ -197,7 +208,7 @@ int FolderLinkedList<T>::Add(T inData)
 					}
 					return 1;
 				}
-				else if (test == EQUAL)
+				else if (test == 2)
 				{
 					cout << "\t중복된 이름이 있습니다." << endl;
 					return 0;
@@ -300,6 +311,18 @@ int FolderLinkedList<T>::Delete(T data)
 }
 
 template<class T>
+int FolderLinkedList<T>::Replace(T data)
+{
+	if (Get(data))	//이름이 일치하는 파일을 발견한다면(1)
+	{
+		cout << "\t바꿀 이름" << endl;
+		cur_pointer->info.SetNameFromKB();
+		return 1;	//성공(1)을 리턴
+	}
+	return 0;	//이름이 일치하는 파일을 찾지 못한다면 실패(0)을 리턴
+}
+
+template<class T>
 T* FolderLinkedList<T>::Open()
 {
 	T temp;
@@ -307,6 +330,17 @@ T* FolderLinkedList<T>::Open()
 	if (Get(temp))
 	{
 		return &(cur_pointer->info);
+	}
+	return 0;
+}
+
+template<class T>
+int FolderLinkedList<T>::Openfile(T temp)
+{
+	if (Get(temp))
+	{
+		temp.Open();
+		return 1;
 	}
 	return 0;
 }

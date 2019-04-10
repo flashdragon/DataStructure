@@ -11,6 +11,7 @@
 #include <iomanip>
 
 #include"FolderLinkedList.h"
+#include"FileType.h"
 using namespace std;
 
 #define FILENAMESIZE 1024
@@ -38,6 +39,7 @@ public:
 		m_fAddress = "";
 		data = 0;
 		date = "";
+		subFolderNum = 0;
 		subFileNum = 0;
 		
 	}
@@ -101,7 +103,7 @@ public:
 	*/
 	int GetFolderNumber()
 	{
-		return subFileNum;
+		return subFolderNum;
 	}
 
 	void setFolderTypeProperty(FolderType &temp)
@@ -210,7 +212,7 @@ public:
 	*/
 	void DisplayFolderNumberOnScreen()
 	{
-		cout << "\tSubFolderNumber : " << subFileNum << endl;
+		cout << "\tSubFolderNumber : " << subFolderNum << endl;
 	};
 	/**
 	*	@brief	Display an folder record on screen.
@@ -258,6 +260,15 @@ public:
 	int AddFolder();
 
 	/**
+	*	@brief	리스트에 폴더를 추가한다.
+	*	@pre	none.
+	*	@post	리스트에 폴더를 추가.
+	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
+	*/
+
+	int AddFile();
+
+	/**
 	*	@brief	리스트에서 해당 이름를 가진 폴더를 찾아 제거한다.
 	*	@pre	입력하는 폴더의 이름이 리스트에 존재해야 한다.
 	*	@post	리스트에 해당 폴더을 제거한다.
@@ -267,12 +278,47 @@ public:
 	int DeleteFolder();
 
 	/**
+	*	@brief	리스트에서 해당 이름를 가진 폴더를 찾아 제거한다.
+	*	@pre	입력하는 폴더의 이름이 리스트에 존재해야 한다.
+	*	@post	리스트에 해당 폴더을 제거한다.
+	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
+	*/
+
+	int DeleteFile();
+
+	/**
+	*	@brief	리스트에서 해당 이름를 가진 폴더를 찾아 이름을 바꾼다.
+	*	@pre	입력하는 폴더의 이름이 리스트에 존재해야 한다.
+	*	@post	리스트에 해당 폴더의 이름을 바꾼다.
+	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
+	*/
+
+	int ReplaceFolderName();
+
+	/**
+	*	@brief	리스트에서 해당 이름를 가진 폴더를 찾아 이름을 바꾼다.
+	*	@pre	입력하는 폴더의 이름이 리스트에 존재해야 한다.
+	*	@post	리스트에 해당 폴더의 이름을 바꾼다.
+	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
+	*/
+
+	int ReplaceFileName();
+
+	/**
+	*	@brief	모든 폴더의 정보를 출력
+	*	@pre	none.
+	*	@post	모든 폴더의 정보가 출력된다.
+	*/
+
+	void DisplayProperty();
+
+	/**
 	*	@brief	모든 파일의 정보를 출력
 	*	@pre	none.
 	*	@post	모든 파일의 정보가 출력된다.
 	*/
 
-	void DisplayProperty();
+	void Displayfile();
 
 	/**
 	*	@brief	이름으로 파일을 검색한다.
@@ -305,6 +351,8 @@ public:
 	*/
 	FolderType* Open();
 
+	int openfile();
+
 	/**
 	*	@brief	상위폴더를 가르킨다.
 	*	@pre	none.
@@ -313,14 +361,16 @@ public:
 	*/
 	FolderType* getParent();
 protected:
-	string mName;					///< file name.
-	string m_fAddress;				///< file address.
-	int data;						///< file data.
-	string date;					///< file date.
-	int subFileNum;					///< file number.
-	FolderLinkedList<FolderType>* down;	///< file array.
+	string mName;							///< folder name.
+	string m_fAddress;						///< folder address.
+	int data;								///< folder data.
+	string date;							///< folder date.
+	int subFolderNum;						///< folder number.
+	FolderLinkedList<FolderType>* down;		///< folder array.
 	FolderType* parent = NULL;
 	int result = 0;
+	FolderLinkedList<FileType>* filelist;
+	int subFileNum;
 };
 
 #endif	// _ITEMTYPE_H

@@ -36,7 +36,7 @@ void FolderType::SetRecordFromKB()
 int FolderType::AddFolder()
 {
 	//서브 파일이 없으면 배열을 할당
-	if (subFileNum == 0)
+	if (subFolderNum == 0)
 	{
 		down = new FolderLinkedList<FolderType>;
 	}
@@ -46,6 +46,25 @@ int FolderType::AddFolder()
 
 	//파일 추가에 성공하면 서브파일 갯수를 1증가하고 1을 리턴, 아니면 0을 리턴
 	if (down->Add(temp))
+	{
+		subFolderNum++;
+		return 1;
+	}
+	return 0;
+}
+int FolderType::AddFile()
+{
+	//서브 파일이 없으면 배열을 할당
+	if (subFileNum == 0)
+	{
+		filelist = new FolderLinkedList<FileType>;
+	}
+
+	/*getFolderTypeFromkeyboard*/
+	FileType temp;
+	temp.setFileTypeProperty();
+	//파일 추가에 성공하면 서브파일 갯수를 1증가하고 1을 리턴, 아니면 0을 리턴
+	if (filelist->Add(temp))
 	{
 		subFileNum++;
 		return 1;
@@ -70,10 +89,51 @@ int FolderType::DeleteFolder()
 	return 0;
 }
 
+int FolderType::DeleteFile()
+{
+	int pre = filelist->GetLength();
+	FileType temp;
+	string a;
+	temp.SetName();
+	filelist->Delete(temp);
+	if (pre > filelist->GetLength()) //이전 item개수보다 현재 item개수가 많아지면 제거성공
+	{
+		cout << "<========DELETE SUCCESS !===========>" << endl;
+		return 1;
+	}
+
+	cout << "<========DELETE FAIL !=======>" << endl;
+	return 0;
+}
+
+int FolderType::ReplaceFolderName()
+{
+	
+	FolderType temp;
+	temp.SetNameFromKB();
+	if (down->Replace(temp))
+	{
+		return 1;
+	}
+	return 0;
+}
+
+int FolderType::ReplaceFileName()
+{
+
+	FileType temp;
+	temp.SetNameFromKB();
+	if (filelist->Replace(temp))
+	{
+		return 1;
+	}
+	return 0;
+}
+
 //모든 파일 출력
 void FolderType::DisplayProperty()
 {
-	if (subFileNum == 0)
+	if (subFolderNum == 0)
 	{
 		return;
 	}
@@ -87,11 +147,27 @@ void FolderType::DisplayProperty()
 	}
 }
 
+void FolderType::Displayfile()
+{
+	if (subFileNum == 0)
+	{
+		return;
+	}
+	FileType file;
+	// list의 모든 데이터를 화면에 출력
+	filelist->ResetList();
+	while (filelist->GetNextItem(file) != NULL)
+	{
+		cout << "\t";
+		file.DisplayNameOnScreen();
+	}
+}
+
 //이름으로 파일을 찾아서 출력한다.
 int FolderType::SearchListByMemberName(FolderType &inData)
 {
 	FolderType tmp;
-	if (subFileNum == 0)
+	if (subFolderNum == 0)
 	{
 		return 0;
 	}
@@ -112,7 +188,6 @@ int FolderType::SearchListByMemberName(FolderType &inData)
 
 
 // Compare two FolderTypes.
-
 RelationType FolderType::CompareByName(const FolderType &data)
 {
 	if(this->mName > data.mName)
@@ -125,7 +200,7 @@ RelationType FolderType::CompareByName(const FolderType &data)
 
 FolderType* FolderType::Open()
 {
-	if (subFileNum == 0)
+	if (subFolderNum == 0)
 	{
 		return 0;
 	}
@@ -133,6 +208,17 @@ FolderType* FolderType::Open()
 	if (ab != 0)
 	{
 		return ab;
+	}
+	return 0;
+}
+
+int FolderType::openfile()
+{
+	FileType temp;
+	temp.SetNameFromKB();
+	if (filelist->Openfile(temp))
+	{
+		return 1;
 	}
 	return 0;
 }

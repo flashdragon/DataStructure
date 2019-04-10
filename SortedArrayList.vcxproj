@@ -78,11 +78,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="FileType.cpp" />
     <ClCompile Include="FolderType.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="FileType.h" />
     <ClInclude Include="FolderLinkedList.h" />
     <ClInclude Include="FolderType.h" />
   </ItemGroup>

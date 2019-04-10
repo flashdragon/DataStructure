@@ -61,11 +61,21 @@ public:
 	int NewFolder();
 
 	/**
+	*	@brief	Add new record into list.
+	*	@pre	list should be initialized.
+	*	@post	new record is added into the list.
+	*	@return	return 1 if this function works well, otherwise 0.
+	*/
+	int NewFile();
+
+	/**
 	*	@brief	Display all records in the list on screen.
 	*	@pre	none.
 	*	@post	none.
 	*/
 	void DisplaySubfolder();
+
+	void DisplaySubfile();
 
 	void DisplayThisfolder();
 
@@ -87,12 +97,36 @@ public:
 	int SearchListByMemberName( FolderType &inData );
 
 	/**
+	*	@brief	리스트에서 해당 이름을 가진 폴더를 찾아 제거한다.
+	*	@pre	입력하는 이름이 리스트에 존재해야 한다.
+	*	@post	리스트에 해당 폴더를 제거한다.
+	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
+	*/
+	int DeleteFolder();
+
+	/**
 	*	@brief	리스트에서 해당 이름을 가진 파일을 찾아 제거한다.
 	*	@pre	입력하는 이름이 리스트에 존재해야 한다.
 	*	@post	리스트에 해당 파일을 제거한다.
 	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
 	*/
-	int DeleteFolder();
+	int DeleteFile();
+
+	/**
+	*	@brief	리스트에서 해당 이름을 가진 파일을 찾아 제거한다.
+	*	@pre	입력하는 이름이 리스트에 존재해야 한다.
+	*	@post	리스트에 해당 파일을 제거한다.
+	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
+	*/
+	void ReplaceFile();
+
+	/**
+	*	@brief	리스트에서 해당 이름을 가진 파일을 찾아 제거한다.
+	*	@pre	입력하는 이름이 리스트에 존재해야 한다.
+	*	@post	리스트에 해당 파일을 제거한다.
+	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
+	*/
+	int OpenFile();
 
 	/**
 	*	@brief	폴더를 연다.
@@ -151,6 +185,12 @@ public:
 	*	@post	none.
 	*/
 	void DisplayCurrentFolder();
+	/**
+	*	@brief	폴더에 이름을 바꾼다.
+	*	@pre	폴더가 있다.
+	*	@post	폴더의 이름이 바뀐다.
+	*/
+	void Replace();
 
 private:
 	ifstream m_InFile;		///< input file descriptor.
