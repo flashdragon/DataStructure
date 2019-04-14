@@ -19,7 +19,7 @@ public:
 	*/
 	FileType()
 	{
-
+		data = 0;
 	}
 
 	/**
@@ -72,10 +72,14 @@ public:
 	{
 		return date;
 	}
-
+	/**
+	*	@brief	파일의 정보를 넣는다
+	*	@pre	none.
+	*	@post	none
+	*/
 	void setFileTypeProperty()
 	{
-		this->SetRecordFromKB();
+		this->SetFileNameFromKB();
 		this->SetAddress(m_fAddress + "/" + this->mName);
 		this->GenCreateTime();
 	}
@@ -112,6 +116,11 @@ public:
 		m_fAddress = address;
 	}
 
+	/**
+	*	@brief	시간을 생성한다.
+	*	@pre	none.
+	*	@post	현재 시간이 나타난다.
+	*/
 	void GenCreateTime();
 
 
@@ -172,11 +181,6 @@ public:
 	};
 
 	/**
-	*	@brief	Display file address on screen.
-	*	@pre	file address is set.
-	*	@post	file address is on screen.
-	*/
-	/**
 	*	@brief	Display an file record on screen.
 	*	@pre	file record is set.
 	*	@post	file record is on screen.
@@ -196,19 +200,19 @@ public:
 	void SetNameFromKB();
 
 	/**
+	*	@brief	파일의 이름을 찾는다.
+	*	@pre	none.
+	*	@post   파일이 검색된다.
+	*/
+	void SetFileNameFromKB();
+
+	/**
 	*	@brief	Set file name from keyboard.
 	*	@pre	none.
 	*	@post	file name is set.
 	*/
 	void SetDataFromKB();
 
-
-	/**
-	*	@brief	Set file record from keyboard.
-	*	@pre	none.
-	*	@post	file record is set.
-	*/
-	void SetRecordFromKB();
 
 
 	/**
@@ -219,6 +223,13 @@ public:
 	*/
 	void Open();
 
+	/**
+	*	@brief	이름으로 파일을 비교한다.
+	*	@pre	none.
+	*	@post	none.
+	*   @param  FileType 비교할 파일.
+	*   @return 높으면 1, 같으면 2, 낮으면 0.
+	*/
 	int CompareByName(FileType data);
 
 protected:
@@ -226,6 +237,6 @@ protected:
 	string m_fAddress;				///< file address.
 	int data;						///< file data.
 	string date;					///< file date.
-	string indata;
+	string indata;					///< 파일의 안에 내용
 
 };

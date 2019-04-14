@@ -20,7 +20,7 @@ void Application::Run()
 			Replace();
 			break;
 		case 4:
-			push(OpenFolder());
+			OpenFolder();
 			break;
 		case 5:
 			NewFile();
@@ -41,11 +41,14 @@ void Application::Run()
 			cout << "\t   --- Current Folder List ---" << endl;
 			DisplayCurrentFolder();
 			break;
-		case 11:		// display all the records in list on screen.
+		case 11:	
+			GoToBack();
+			break;
+		case 12:	// display all the records in list on screen.
 			DisplayThisfolder();
 			break;
-		case 12:
-			push(GoToUpFolder());
+		case 13:
+			GoToUpFolder();
 			break;
 		case 0:
 			return;
@@ -78,9 +81,10 @@ int Application::GetCommand()
 	cout << "\t    7 : 파일 이름 바꾸기" << endl;
 	cout << "\t    8 : 파일 열기" << endl;
 	cout << "\t    9 : 검색" << endl;
-	cout << "\t   10 : 최근 열어본 폴더" << endl;
-	cout << "\t   11 : 현재 폴더의 속성" << endl;
-	cout << "\t   12 : 상위 폴더로 이동" << endl;
+	cout << "\t   10 : 최근 열어본 폴더및 파일" << endl;
+	cout << "\t   11 : 뒤로가기" << endl;
+	cout << "\t   12 : 현재 폴더의 속성" << endl;
+	cout << "\t   13 : 상위 폴더로 이동" << endl;
 	cout << "\t    0 : 종료" << endl; 
 
 	cout << endl << "\t Choose a Command--> ";
@@ -99,21 +103,23 @@ int Application::NewFolder()
 	return 1;
 }
 
-//이름을 입력받은 item으로 리스트에서 파일을 찾아서 출력한다.
+//이름을 입력받은 item으로 리스트에서 폴더를 찾아서 출력한다.
 int Application::RetriveFolderByName()
 {
 	FolderType item;
 	item.SetNameFromKB(); //name을 입력받는다.
 
-	if(SearchListByMemberName(item)) //0이 아니면(찾으면)
-		return 1;	//성공(1)을 리턴
-	return 0;	//실패(0)을 리턴
+	SearchListByMemberName(item); //0이 아니면(찾으면)
+	return 1;		
+	
 }
 
 //이름으로 파일을 찾아서 출력한다.
 int Application::SearchListByMemberName( FolderType &inData )
 {
-	return cur_Folder->SearchListByMemberName(inData);
+	cur_Folder->SearchListByMemberName(inData);
+	cur_Folder->SearchFileByMemberName(inData);
+	return 1;
 }
 
 //이름으로 파일을 찾아서 제거한다.
@@ -138,8 +144,10 @@ void Application::ReplaceFile()
 }
 int Application::OpenFile()
 {
-	if (cur_Folder->openfile())
+	string a= cur_Folder->openfile();
+	if (a != "")
 	{
+		push(a);
 		return 1;
 	}
 	cout << "\t파일을 찾지 못했습니다." << endl;
@@ -151,7 +159,11 @@ FolderType* Application::OpenFolder()
 	FolderType* temp = cur_Folder->Open();
 	if (temp != 0)
 	{
-		return cur_Folder = temp;
+		stack[stacknum] = cur_Folder;
+		stacknum++;
+		cur_Folder = temp;
+		push(cur_Folder->GetName());
+		return cur_Folder;
 	}
 	return NULL;
 }
@@ -161,15 +173,19 @@ FolderType* Application::GoToUpFolder()
 {
 	if (cur_Folder->GetAddress() != "root")
 	{
-		return cur_Folder = cur_Folder->getParent();
+		stack[stacknum] = cur_Folder;
+		stacknum++;
+		cur_Folder = cur_Folder->getParent();
+		push(cur_Folder->GetName());
+		return cur_Folder;
 	}
 	cout << "\t최상위 폴더입니다" << endl;
 	return 0;
 }
 ///큐에 넣는다
-void Application::push(FolderType* temp)
+void Application::push(string temp)
 {
-	if (temp == NULL) 
+	if (temp == "") 
 	{
 		return;
 	}
@@ -196,7 +212,7 @@ void Application::push(FolderType* temp)
 void Application::pop()
 {
 	cnt--;
-	queue[front] = NULL;
+	queue[front] = "";
 	front++;
 	front %= MAXFOLDERSIZE;
 }
@@ -238,7 +254,7 @@ void Application::DisplayCurrentFolder()
 {
 	for (int i = back-1; i>=0; i--)
 	{
-		cout << queue[i]->GetName() << endl;
+		cout << "\t" << queue[i] << endl;
 	}
 }
 
@@ -251,5 +267,28 @@ void Application::Replace()
 	else 
 	{
 		cout << "\t이름 교체 실패" << endl;
+	}
+}
+
+void Application::AddStack(FolderType * temp)
+{
+	stack[stacknum] = temp;
+}
+
+void Application::PopStack()
+{
+	stacknum--;
+}
+
+void Application::GoToBack()
+{
+	if (stacknum > 0)
+	{
+		cur_Folder = stack[stacknum - 1];
+		stacknum--;
+	}
+	else
+	{
+		cout << "\t뒤로갈수가 없습니다.";
 	}
 }

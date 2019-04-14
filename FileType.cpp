@@ -13,7 +13,7 @@ void FileType::GenCreateTime()
 }
 
 // Set file name from keyboard.
-void FileType::SetNameFromKB()
+void FileType::SetFileNameFromKB()
 {
 	string a;
 	cout << "\tName : ";
@@ -24,6 +24,15 @@ void FileType::SetNameFromKB()
 	infile.close();
 }
 
+// Set file name from keyboard.
+void FileType::SetNameFromKB()
+{
+	string a;
+	cout << "\tName : ";
+	cin >> a;
+	SetName(a);
+}
+
 // Set file Data from keyboard.
 void FileType::SetDataFromKB()
 {
@@ -31,26 +40,24 @@ void FileType::SetDataFromKB()
 	cin >> data;
 }
 
-
-// Set file record from keyboard.
-
-void FileType::SetRecordFromKB()
-{
-	SetNameFromKB();
-}
-
-
-
-
 // Compare two FileTypes.
 void FileType::Open()
 {
-	string a;
+	string a="";
 	ofstream output;
 	output.open(this->mName);
-	cout << "입력할 내용: ";
-	cin >> a;
-	output << a;
+	while (1)
+	{
+		cout << "\t입력할 내용: ";
+		cin >> a;
+		if (a == "Exit")
+		{
+			break;
+		}
+		output << a;
+		output << "\n";
+		cout << "\t종료할려면: \"Exit\"\n";
+	}
 	output.close();
 }
 

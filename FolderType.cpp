@@ -94,7 +94,10 @@ int FolderType::DeleteFile()
 	int pre = filelist->GetLength();
 	FileType temp;
 	string a;
-	temp.SetName();
+	string name;
+	cout << "\tname:";
+	cin >> name;
+	temp.SetName(name);
 	filelist->Delete(temp);
 	if (pre > filelist->GetLength()) //이전 item개수보다 현재 item개수가 많아지면 제거성공
 	{
@@ -113,6 +116,7 @@ int FolderType::ReplaceFolderName()
 	temp.SetNameFromKB();
 	if (down->Replace(temp))
 	{
+		down->cur()->info.SetAddress(m_fAddress + "/" + down->cur()->info.GetName());
 		return 1;
 	}
 	return 0;
@@ -181,11 +185,30 @@ int FolderType::SearchListByMemberName(FolderType &inData)
 			result = 1;	//성공(1)
 		}
 		tmp.SearchListByMemberName(inData);
+		tmp.SearchFileByMemberName(inData);
 	}
 	return result;
 }
 
+int FolderType::SearchFileByMemberName(FolderType &inData)
+{
+	FileType tmp;
+	if (subFileNum == 0)
+	{
+		return 0;
+	}
+	filelist->ResetList();//iterator 초기화
+	while (filelist->GetNextItem(tmp) != NULL) //리스트의 마지막까지 반복
+	{
+		if (tmp.GetName().find(inData.GetName()) != -1) //만약 해당 리스트의 이름에 inData의 이름이 존재하면
+		{
 
+			tmp.DisplayRecordOnScreen();
+			result = 1;	//성공(1)
+		}
+	}
+	return result;
+}
 
 // Compare two FolderTypes.
 RelationType FolderType::CompareByName(const FolderType &data)
@@ -212,15 +235,15 @@ FolderType* FolderType::Open()
 	return 0;
 }
 
-int FolderType::openfile()
+string FolderType::openfile()
 {
 	FileType temp;
 	temp.SetNameFromKB();
 	if (filelist->Openfile(temp))
 	{
-		return 1;
+		return temp.GetName();
 	}
-	return 0;
+	return "";
 }
 
 FolderType* FolderType::getParent()

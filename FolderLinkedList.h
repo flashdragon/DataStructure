@@ -128,6 +128,17 @@ public:
 
 	int Openfile(T temp);
 
+	/**
+	*	@brief	현재 위치를 나타낸다.
+	*	@pre	none.
+	*	@post	none
+	*	@return 현재 위치를 리턴.
+	*/
+	Node<T>* cur()
+	{
+		return cur_pointer;
+	}
+
 
 private:
 	Node<T> * cur_pointer;		///< 지금 포인터
@@ -317,6 +328,8 @@ int FolderLinkedList<T>::Replace(T data)
 	{
 		cout << "\t바꿀 이름" << endl;
 		cur_pointer->info.SetNameFromKB();
+		
+
 		return 1;	//성공(1)을 리턴
 	}
 	return 0;	//이름이 일치하는 파일을 찾지 못한다면 실패(0)을 리턴

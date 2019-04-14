@@ -29,7 +29,7 @@ public:
 		root.SetAddress("root");
 		root.SetName("rootfolder");
 		cur_Folder = &root;
-		
+		stacknum = 0;
 	}
 	
 	/**
@@ -75,8 +75,17 @@ public:
 	*/
 	void DisplaySubfolder();
 
+	/**
+	*	@brief	Display all subfile in the list on screen.
+	*	@pre	none.
+	*	@post	none.
+	*/
 	void DisplaySubfile();
-
+	/**
+	*	@brief	Display this folder's property on screen.
+	*	@pre	none.
+	*	@post	none.
+	*/
 	void DisplayThisfolder();
 
 	/**
@@ -171,7 +180,7 @@ public:
 	*	@post	큐가 채워진다.
 	*	@pram   temp 집어넣는것.
 	*/
-	void push(FolderType* temp);
+	void push(string temp);
 	/**
 	*	@brief  큐에서 뺀다.
 	*	@pre	none.
@@ -180,7 +189,7 @@ public:
 	void pop();
 
 	/**
-	*	@brief  최근열어본 폴더를 연다.
+	*	@brief  최근열어본 폴더를 보여준다.
 	*	@pre	none.
 	*	@post	none.
 	*/
@@ -192,16 +201,39 @@ public:
 	*/
 	void Replace();
 
+	/**
+	*	@brief	스택에 폴더의 이름을 넣는다.
+	*	@pre	폴더가 있다.
+	*	@post	스택의 갯수가 증가한다.
+	*/
+	void AddStack(FolderType* temp);
+
+	/**
+	*	@brief	스택에서 스택의 갯수가 준다.
+	*	@pre	폴더가 있다.
+	*	@post	스택의 갯수가 준다.
+	*/
+	void PopStack();
+
+	/**
+	*	@brief	전에 있었던 곳으로 간다.
+	*	@pre	none.
+	*	@post	뒤로간다.
+	*/
+	void GoToBack();
+
 private:
 	ifstream m_InFile;		///< input file descriptor.
 	ofstream m_OutFile;		///< output file descriptor.
 	FolderType root;		///< root folder.
 	FolderType* cur_Folder;	///< curent folder.
-	FolderType* queue[MAXFOLDERSIZE]; ///최근 열어본폴더의 주소배열
+	string queue[MAXFOLDERSIZE]; ///최근 열어본폴더의 주소배열
 	int front;						///큐의 앞
 	int back;				///큐의 뒤
 	int cnt;				///큐의 갯수
 	int m_Command;			///< current command number.
+	FolderType* stack[100];
+	int stacknum;
 };
 
 #endif	// _APPLICATION_H
