@@ -44,10 +44,13 @@ void Application::Run()
 		case 11:	
 			GoToBack();
 			break;
-		case 12:	// display all the records in list on screen.
+		case 12:
+			GoToFront();
+			break;
+		case 13:	// display all the records in list on screen.
 			DisplayThisfolder();
 			break;
-		case 13:
+		case 14:
 			GoToUpFolder();
 			break;
 		case 0:
@@ -82,9 +85,10 @@ int Application::GetCommand()
 	cout << "\t    8 : 파일 열기" << endl;
 	cout << "\t    9 : 검색" << endl;
 	cout << "\t   10 : 최근 열어본 폴더및 파일" << endl;
-	cout << "\t   11 : 뒤로가기" << endl;
-	cout << "\t   12 : 현재 폴더의 속성" << endl;
-	cout << "\t   13 : 상위 폴더로 이동" << endl;
+	cout << "\t   11 : 뒤로 가기" << endl;
+	cout << "\t   12 : 앞으로 가기" << endl;
+	cout << "\t   13 : 현재 폴더의 속성" << endl;
+	cout << "\t   14 : 상위 폴더로 이동" << endl;
 	cout << "\t    0 : 종료" << endl; 
 
 	cout << endl << "\t Choose a Command--> ";
@@ -159,8 +163,7 @@ FolderType* Application::OpenFolder()
 	FolderType* temp = cur_Folder->Open();
 	if (temp != 0)
 	{
-		stack[stacknum] = cur_Folder;
-		stacknum++;
+		AddStack(cur_Folder);
 		cur_Folder = temp;
 		push(cur_Folder->GetName());
 		return cur_Folder;
@@ -173,8 +176,7 @@ FolderType* Application::GoToUpFolder()
 {
 	if (cur_Folder->GetAddress() != "root")
 	{
-		stack[stacknum] = cur_Folder;
-		stacknum++;
+		AddStack(cur_Folder);
 		cur_Folder = cur_Folder->getParent();
 		push(cur_Folder->GetName());
 		return cur_Folder;
@@ -185,36 +187,50 @@ FolderType* Application::GoToUpFolder()
 ///큐에 넣는다
 void Application::push(string temp)
 {
+	int change = 6;
 	if (temp == "") 
 	{
 		return;
 	}
     //
-	for (int i = front; i < back; i++)
+	for (int i = 0; i < cnt; i++)
 	{
 		if (queue[i] == temp)
 		{
-			for (int j = i; j < back; j++)
-			{
-				queue[j] = queue[j + 1];
-			}
-			back--;
-			cnt--;
-			break;
+			change = i;
 		}
 	}
-	queue[back] = temp;
-	back++;
-	back %= MAXFOLDERSIZE;
-	cnt++;
+	if (change < 5)
+	{
+		for (int i = change - 1; i >= 0; i--)
+		{
+			queue[i + 1] = queue[i];
+		}
+		queue[0] = temp;
+	}
+	else if (cnt == 5)
+	{
+		for (int i = 4; i >= 0; i--)
+		{
+			queue[i + 1] = queue[i];
+		}
+		queue[0] = temp;
+	}
+	else
+	{
+		for (int i = cnt - 1; i >= 0; i--)
+		{
+			queue[i + 1] = queue[i];
+		}
+		queue[0] = temp;
+		cnt++;
+	}
 }
 ///큐에서 뺀다.
 void Application::pop()
 {
+	queue[cnt] = "";
 	cnt--;
-	queue[front] = "";
-	front++;
-	front %= MAXFOLDERSIZE;
 }
 
 
@@ -252,9 +268,9 @@ void Application:: DisplayThisfolder()
 
 void Application::DisplayCurrentFolder() 
 {
-	for (int i = back-1; i>=0; i--)
+	for (int i = 0; i < cnt; i++)
 	{
-		cout << "\t" << queue[i] << endl;
+		cout << "\t    " << queue[i] << endl;
 	}
 }
 
@@ -273,6 +289,8 @@ void Application::Replace()
 void Application::AddStack(FolderType * temp)
 {
 	stack[stacknum] = temp;
+	stacknum++;
+	frontnum = stacknum;
 }
 
 void Application::PopStack()
@@ -284,11 +302,25 @@ void Application::GoToBack()
 {
 	if (stacknum > 0)
 	{
-		cur_Folder = stack[stacknum - 1];
-		stacknum--;
+		stack[stacknum] = cur_Folder;
+		PopStack();
+		cur_Folder = stack[stacknum];
 	}
 	else
 	{
 		cout << "\t뒤로갈수가 없습니다.";
+	}
+}
+
+void Application::GoToFront()
+{
+	if (stacknum == frontnum)
+	{
+		cout << "\t앞으로 갈곳이 없습니다." << endl;
+	}
+	else 
+	{
+		stacknum++;
+		cur_Folder = stack[stacknum];
 	}
 }

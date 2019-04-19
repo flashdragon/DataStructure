@@ -7,9 +7,7 @@
 using namespace std;
 
 #include "FolderType.h"
-
-#define FILENAMESIZE 1024
-#define MAXFOLDERSIZE 1<<15
+#define MAXFOLDERSIZE 5 
 
 /**
 *	application class for item management simply.
@@ -22,14 +20,13 @@ public:
 	*/
 	Application()
 	{
-		front = 0;
-		back = 0;
 		cnt = 0;
 		m_Command = 0;
 		root.SetAddress("root");
 		root.SetName("rootfolder");
 		cur_Folder = &root;
 		stacknum = 0;
+		frontnum = 0;
 	}
 	
 	/**
@@ -222,18 +219,22 @@ public:
 	*/
 	void GoToBack();
 
+	/**
+	*	@brief	앞으로 간다.
+	*	@pre	none.
+	*	@post	앞으로 간다.
+	*/
+	void GoToFront();
+
 private:
-	ifstream m_InFile;		///< input file descriptor.
-	ofstream m_OutFile;		///< output file descriptor.
-	FolderType root;		///< root folder.
-	FolderType* cur_Folder;	///< curent folder.
-	string queue[MAXFOLDERSIZE]; ///최근 열어본폴더의 주소배열
-	int front;						///큐의 앞
-	int back;				///큐의 뒤
-	int cnt;				///큐의 갯수
-	int m_Command;			///< current command number.
-	FolderType* stack[100];
-	int stacknum;
+	FolderType root;				///< root folder.
+	FolderType* cur_Folder;			///< curent folder.
+	string queue[MAXFOLDERSIZE];	///< 최근 열어본폴더의 주소배열
+	int cnt;						///< 큐의 갯수
+	int m_Command;					///< current command number.
+	FolderType* stack[100];			///< 뒤로가기 기능
+	int stacknum;					///< 스택의 갯수
+	int frontnum;					///< 앞으로 가기 기능때 필요한수
 };
 
 #endif	// _APPLICATION_H

@@ -126,6 +126,14 @@ public:
 	*/
 	T* Open();
 
+	/**
+	*	@brief	파일을 열어 들어간다.
+	*	@pre	파일이 있어야한다.
+	*	@post	none
+	*	@param	temp	열고싶은 파일.
+	*	@return 성공하면 1을 리턴 실패하면 0을 리턴.
+	*/
+
 	int Openfile(T temp);
 
 	/**
