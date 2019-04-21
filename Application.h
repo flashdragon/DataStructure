@@ -27,6 +27,7 @@ public:
 		cur_Folder = &root;
 		stacknum = 0;
 		frontnum = 0;
+		adnum = 0;
 	}
 	
 	/**
@@ -226,6 +227,13 @@ public:
 	*/
 	void GoToFront();
 
+	/**
+	*	@brief	입력한 주소로 간다.
+	*	@pre	none.
+	*	@post	입력한 주소로 간다.
+	*/
+	void GoToAddress();
+
 private:
 	FolderType root;				///< root folder.
 	FolderType* cur_Folder;			///< curent folder.
@@ -235,6 +243,8 @@ private:
 	FolderType* stack[100];			///< 뒤로가기 기능
 	int stacknum;					///< 스택의 갯수
 	int frontnum;					///< 앞으로 가기 기능때 필요한수
+	string ad[100];					///< 입력한 주소 자르고 넣은거
+	int adnum;						///< 들어갈 주소의 갯수
 };
 
 #endif	// _APPLICATION_H

@@ -53,6 +53,9 @@ void Application::Run()
 		case 14:
 			GoToUpFolder();
 			break;
+		case 15:
+			GoToAddress();
+			break;
 		case 0:
 			return;
 		default:
@@ -89,6 +92,7 @@ int Application::GetCommand()
 	cout << "\t   12 : 앞으로 가기" << endl;
 	cout << "\t   13 : 현재 폴더의 속성" << endl;
 	cout << "\t   14 : 상위 폴더로 이동" << endl;
+	cout << "\t   15 : 해당 경로로 이동" << endl;
 	cout << "\t    0 : 종료" << endl; 
 
 	cout << endl << "\t Choose a Command--> ";
@@ -160,11 +164,13 @@ int Application::OpenFile()
 ///폴더를 연다
 FolderType* Application::OpenFolder()
 {
-	FolderType* temp = cur_Folder->Open();
-	if (temp != 0)
+	FolderType temp;
+	temp.SetNameFromKB();
+	FolderType* test = cur_Folder->Open(temp);
+	if (test != 0)
 	{
 		AddStack(cur_Folder);
-		cur_Folder = temp;
+		cur_Folder = test;
 		push(cur_Folder->GetName());
 		return cur_Folder;
 	}
@@ -286,7 +292,7 @@ void Application::Replace()
 	}
 }
 
-void Application::AddStack(FolderType * temp)
+void Application::AddStack(FolderType* temp)
 {
 	stack[stacknum] = temp;
 	stacknum++;
@@ -323,4 +329,43 @@ void Application::GoToFront()
 		stacknum++;
 		cur_Folder = stack[stacknum];
 	}
+}
+
+void Application::GoToAddress()
+{
+	FolderType* temp = cur_Folder;
+	adnum = 0;
+	string address;
+	cin >> address;
+	ad[0] = "";
+	for (int i = 0; i < address.length(); i++)
+	{
+		if (address[i] == '/')
+		{
+			adnum++;
+			ad[adnum] = "";
+		}
+		else
+		{
+			ad[adnum] = ad[adnum] + address[i];
+		}
+	}
+	cur_Folder = &root;
+	for (int i = 1; i < adnum; i++)
+	{
+		FolderType ttt;
+		ttt.SetName(ad[i]);
+		FolderType* test = cur_Folder->Open(ttt);
+		if (test != NULL)
+		{
+			cur_Folder = test;
+		}
+		else
+		{
+			cur_Folder = temp;
+			return;
+		}
+	}
+	AddStack(temp);
+	push(cur_Folder->GetName());
 }

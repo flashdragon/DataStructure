@@ -124,7 +124,7 @@ public:
 	*	@post	none
 	*	@return 오픈한폴더의 주소를 리턴.
 	*/
-	T* Open();
+	T* Open(T temp);
 
 	/**
 	*	@brief	파일을 열어 들어간다.
@@ -344,15 +344,13 @@ int FolderLinkedList<T>::Replace(T data)
 }
 
 template<class T>
-T* FolderLinkedList<T>::Open()
+T* FolderLinkedList<T>::Open(T temp)
 {
-	T temp;
-	temp.SetNameFromKB();
 	if (Get(temp))
 	{
 		return &(cur_pointer->info);
 	}
-	return 0;
+	return NULL;
 }
 
 template<class T>

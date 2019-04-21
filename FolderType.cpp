@@ -221,18 +221,18 @@ RelationType FolderType::CompareByName(const FolderType &data)
 		return EQUAL;
 }
 
-FolderType* FolderType::Open()
+FolderType* FolderType::Open(FolderType temp)
 {
 	if (subFolderNum == 0)
 	{
-		return 0;
+		return NULL;
 	}
-	FolderType* ab = down->Open();
-	if (ab != 0)
+	FolderType* ab = down->Open(temp);
+	if (ab != NULL)
 	{
 		return ab;
 	}
-	return 0;
+	return NULL;
 }
 
 string FolderType::openfile()

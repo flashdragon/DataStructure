@@ -370,7 +370,7 @@ public:
 	*	@post	none
 	*	@return 폴더의 주소값.
 	*/
-	FolderType* Open();
+	FolderType* Open(FolderType temp);
 
 	/**
 	*	@brief	파일을 연다
