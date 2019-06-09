@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include"FolderLinkedList.h"
+#include"SortedLinkedList.h"
 
 using namespace std;
 
@@ -79,7 +79,7 @@ public:
 	*/
 	void setFileTypeProperty()
 	{
-		this->SetFileNameFromKB();
+		this->SetNameFromKB();
 		this->SetAddress(m_fAddress + "/" + this->mName);
 		this->GenCreateTime();
 	}

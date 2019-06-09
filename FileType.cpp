@@ -1,5 +1,5 @@
 #include "FileType.h"
-#include "FolderLinkedList.h"
+#include "SortedLinkedList.h"
 
 void FileType::GenCreateTime()
 {
@@ -13,7 +13,7 @@ void FileType::GenCreateTime()
 }
 
 // Set file name from keyboard.
-void FileType::SetFileNameFromKB()
+void FileType::SetNameFromKB()
 {
 	string a;
 	cout << "\tName : ";
@@ -25,7 +25,7 @@ void FileType::SetFileNameFromKB()
 }
 
 // Set file name from keyboard.
-void FileType::SetNameFromKB()
+void FileType::SetFileNameFromKB()
 {
 	string a;
 	cout << "\tName : ";

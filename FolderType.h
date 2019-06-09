@@ -10,7 +10,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include"FolderLinkedList.h"
+#include"SortedLinkedList.h"
 #include"FileType.h"
 using namespace std;
 
@@ -41,6 +41,9 @@ public:
 		date = "";
 		subFolderNum = 0;
 		subFileNum = 0;
+		down = NULL;
+		filelist = NULL;
+		parent = NULL;
 		
 	}
 
@@ -49,7 +52,23 @@ public:
 	*/
 	~FolderType()	
 	{
+		if (down != NULL)
+		{
+			delete down;
+		}
+		if (filelist != NULL)
+		{
+			delete filelist;
+		}
 	}
+
+
+	//복사생성자
+	FolderType(FolderType& data);
+
+	//대입연산자
+	FolderType& operator= (const FolderType& data);
+
 
 	/**
 	*	@brief	Get folder name.
@@ -115,7 +134,7 @@ public:
 	void setFolderTypeProperty(FolderType &temp)
 	{
 		temp.parent = this;
-		temp.SetRecordFromKB();
+		temp.SetNameFromKB();
 		temp.SetAddress(m_fAddress + "/" + temp.mName);
 		temp.GenCreateTime();
 	}
@@ -217,13 +236,23 @@ public:
 	};
 
 	/**
-	*	@brief	Display folder address on screen.
-	*	@pre	folder address is set.
-	*	@post	folder address is on screen.
+	*	@brief	Display folder number on screen.
+	*	@pre	folder number is set.
+	*	@post	folder number is on screen.
 	*/
 	void DisplayFolderNumberOnScreen()
 	{
 		cout << "\tSubFolderNumber : " << subFolderNum << endl;
+	};
+
+	/**
+	*	@brief	Display file number on screen.
+	*	@pre	file number is set.
+	*	@post	file number is on screen.
+	*/
+	void DisplayFileNumberOnScreen()
+	{
+		cout << "\tSubFileNumber : " << subFileNum << endl;
 	};
 
 	/**
@@ -238,6 +267,7 @@ public:
 		DisplayDataOnScreen();
 		DisplayDateOnScreen();
 		DisplayFolderNumberOnScreen();
+		DisplayFileNumberOnScreen();
 	};
 
 	/**
@@ -253,14 +283,6 @@ public:
 	*	@post	folder name is set.
 	*/
 	void SetDataFromKB();
-
-
-	/**
-	*	@brief	Set folder record from keyboard.
-	*	@pre	none.
-	*	@post	folder record is set.
-	*/
-	void SetRecordFromKB();
 
 	/**
 	*	@brief	리스트에 폴더를 추가한다.
@@ -287,7 +309,7 @@ public:
 	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
 	*/
 
-	int DeleteFolder();
+	int DeleteFolder(FolderType temp);
 
 	/**
 	*	@brief	리스트에서 해당 이름를 가진 파일를 찾아 제거한다.
@@ -378,7 +400,7 @@ public:
 	*	@post	none
 	*	@return 파일의 이름.
 	*/
-	string openfile();
+	FileType* openfile();
 
 	/**
 	*	@brief	상위폴더를 가르킨다.
@@ -388,6 +410,14 @@ public:
 	*/
 	FolderType* getParent();
 
+	FolderType* getFolderPointer(FolderType& temp);
+
+	void SetParent(FolderType* temp);
+
+
+
+	int Paste(FolderType* temp);
+
 
 protected:
 	string mName;							///< folder name.
@@ -395,10 +425,10 @@ protected:
 	int data;								///< folder data.
 	string date;							///< folder date.
 	int subFolderNum;						///< folder number.
-	FolderLinkedList<FolderType>* down;		///< folder array.
-	FolderType* parent = NULL;				///< 폴더의 상위 폴더.
+	SortedLinkedList<FolderType>* down;		///< folder array.
+	FolderType* parent;						///< 폴더의 상위 폴더.
 	int result = 0;							///< 폴더 찾을때 결과.
-	FolderLinkedList<FileType>* filelist;	///< 파일의 리스트.
+	SortedLinkedList<FileType>* filelist;	///< 파일의 리스트.
 	int subFileNum;							///< 파일리스트의 파일 갯수.
 };
 

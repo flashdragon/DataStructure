@@ -23,37 +23,45 @@ void Application::Run()
 			OpenFolder();
 			break;
 		case 5:
-			NewFile();
+			CopyFolder();
 			break;
 		case 6:
-			DeleteFile();
+			CutFolder();
 			break;
 		case 7:
-			ReplaceFile();
+			PasteFolder();
 			break;
 		case 8:
-			OpenFile();
+			NewFile();
 			break;
-		case 9:		//search by name.
-			RetriveFolderByName();
+		case 9:
+			DeleteFile();
 			break;
 		case 10:
-			cout << "\t   --- Current Folder List ---" << endl;
+			ReplaceFile();
+			break;
+		case 11:
+			OpenFile();
+			break;
+		case 12:		//search by name.
+			RetriveFolderByName();
+			break;
+		case 13:
 			DisplayCurrentFolder();
 			break;
-		case 11:	
+		case 14:	
 			GoToBack();
 			break;
-		case 12:
+		case 15:
 			GoToFront();
 			break;
-		case 13:	// display all the records in list on screen.
+		case 16:	// display all the records in list on screen.
 			DisplayThisfolder();
 			break;
-		case 14:
+		case 17:
 			GoToUpFolder();
 			break;
-		case 15:
+		case 18:
 			GoToAddress();
 			break;
 		case 0:
@@ -73,7 +81,7 @@ int Application::GetCommand()
 	cout << endl << endl;
 	cout << "\t   Current Path:"<<cur_Folder->GetAddress();
 	cout << endl;
-	cout << "\t   --- Sub Folder List ---" << endl;
+	cout << "\t   --- Sub List ---" << endl;
 	DisplaySubfolder();
 	DisplaySubfile();
 	
@@ -82,17 +90,20 @@ int Application::GetCommand()
 	cout << "\t    2 : 폴더 삭제" << endl;
 	cout << "\t    3 : 폴더 이름 바꾸기" << endl;
 	cout << "\t    4 : 폴더 열기" << endl;
-	cout << "\t    5 : 파일 생성" << endl;
-	cout << "\t    6 : 파일 삭제" << endl;
-	cout << "\t    7 : 파일 이름 바꾸기" << endl;
-	cout << "\t    8 : 파일 열기" << endl;
-	cout << "\t    9 : 검색" << endl;
-	cout << "\t   10 : 최근 열어본 폴더및 파일" << endl;
-	cout << "\t   11 : 뒤로 가기" << endl;
-	cout << "\t   12 : 앞으로 가기" << endl;
-	cout << "\t   13 : 현재 폴더의 속성" << endl;
-	cout << "\t   14 : 상위 폴더로 이동" << endl;
-	cout << "\t   15 : 해당 경로로 이동" << endl;
+	cout << "\t    5 : 폴더 복사" << endl;
+	cout << "\t    6 : 폴더 자르기" << endl;
+	cout << "\t    7 : 폴더 붙여넣기" << endl;
+	cout << "\t    8 : 파일 생성" << endl;
+	cout << "\t    9 : 파일 삭제" << endl;
+	cout << "\t   10 : 파일 이름 바꾸기" << endl;
+	cout << "\t   11 : 파일 열기" << endl;
+	cout << "\t   12 : 검색" << endl;
+	cout << "\t   13 : 최근 열어본 폴더및 파일" << endl;
+	cout << "\t   14 : 뒤로 가기" << endl;
+	cout << "\t   15 : 앞으로 가기" << endl;
+	cout << "\t   16 : 현재 폴더의 속성" << endl;
+	cout << "\t   17 : 상위 폴더로 이동" << endl;
+	cout << "\t   18 : 해당 경로로 이동" << endl;
 	cout << "\t    0 : 종료" << endl; 
 
 	cout << endl << "\t Choose a Command--> ";
@@ -107,8 +118,12 @@ int Application::GetCommand()
 int Application::NewFolder()
 {
 	// 파일 추가
-	cur_Folder->AddFolder();
-	return 1;
+	if (cur_Folder->AddFolder())
+	{
+		return 1;
+	}
+	cout << "\t파일 생성 실패" << endl;
+	return 0;
 }
 
 //이름을 입력받은 item으로 리스트에서 폴더를 찾아서 출력한다.
@@ -133,7 +148,9 @@ int Application::SearchListByMemberName( FolderType &inData )
 //이름으로 파일을 찾아서 제거한다.
 int Application::DeleteFolder()
 {
-	return cur_Folder->DeleteFolder();
+	FolderType temp;
+	temp.SetNameFromKB();
+	return cur_Folder->DeleteFolder(temp);
 }
 int Application::DeleteFile()
 {
@@ -152,10 +169,10 @@ void Application::ReplaceFile()
 }
 int Application::OpenFile()
 {
-	string a= cur_Folder->openfile();
-	if (a != "")
+	FileType* a= cur_Folder->openfile();
+	if (a != NULL)
 	{
-		push(a);
+		FilePushQue(a);
 		return 1;
 	}
 	cout << "\t파일을 찾지 못했습니다." << endl;
@@ -169,9 +186,9 @@ FolderType* Application::OpenFolder()
 	FolderType* test = cur_Folder->Open(temp);
 	if (test != 0)
 	{
-		AddStack(cur_Folder);
+		AddStack(test);
 		cur_Folder = test;
-		push(cur_Folder->GetName());
+		FolderPushQue(cur_Folder);
 		return cur_Folder;
 	}
 	return NULL;
@@ -182,62 +199,82 @@ FolderType* Application::GoToUpFolder()
 {
 	if (cur_Folder->GetAddress() != "root")
 	{
-		AddStack(cur_Folder);
 		cur_Folder = cur_Folder->getParent();
-		push(cur_Folder->GetName());
+		AddStack(cur_Folder);
+		FolderPushQue(cur_Folder);
 		return cur_Folder;
 	}
 	cout << "\t최상위 폴더입니다" << endl;
 	return 0;
 }
-///큐에 넣는다
-void Application::push(string temp)
+
+void Application::CopyFolder()
 {
-	int change = 6;
-	if (temp == "") 
+	if (cur_Folder->GetFolderNumber() > 0)
 	{
-		return;
-	}
-    //
-	for (int i = 0; i < cnt; i++)
-	{
-		if (queue[i] == temp)
+		FolderType temp;
+		temp.SetNameFromKB();
+		FolderType* test;
+		test = cur_Folder->getFolderPointer(temp);
+		if (test == NULL)
 		{
-			change = i;
+			cout << "\t파일을 못 찾았습니다." << endl;
 		}
-	}
-	if (change < 5)
-	{
-		for (int i = change - 1; i >= 0; i--)
+		else
 		{
-			queue[i + 1] = queue[i];
+			copy = test;
 		}
-		queue[0] = temp;
-	}
-	else if (cnt == 5)
-	{
-		for (int i = 4; i >= 0; i--)
-		{
-			queue[i + 1] = queue[i];
-		}
-		queue[0] = temp;
 	}
 	else
-	{
-		for (int i = cnt - 1; i >= 0; i--)
-		{
-			queue[i + 1] = queue[i];
-		}
-		queue[0] = temp;
-		cnt++;
-	}
+		cout << "\t서브 폴더가 없습니다." << endl;
 }
-///큐에서 뺀다.
-void Application::pop()
+
+void Application::CutFolder()
 {
-	queue[cnt] = "";
-	cnt--;
+	if (cur_Folder->GetFolderNumber() > 0)
+	{
+		FolderType temp;
+		temp.SetNameFromKB();
+		FolderType* test;
+		test = cur_Folder->getFolderPointer(temp);
+		if (test == NULL)
+		{
+			cout << "\t파일을 못 찾았습니다." << endl;
+		}
+		else
+		{
+			copy = test;
+			cur_Folder->DeleteFolder(temp);
+		}
+	}
+	else
+		cout << "\t서브 폴더가 없습니다." << endl;
+
 }
+
+void Application::PasteFolder()
+{
+	if (copy != NULL)
+	{
+		FolderType* temp = new FolderType(*copy);
+		cur_Folder->Paste(temp);
+	}
+	else
+		cout << "\t복사하거나 자르기를 한 파일이 없습니다." << endl;
+}
+
+
+///큐에 폴더를 넣는다
+void Application::FolderPushQue(FolderType* temp)
+{
+	fol.AddQ(temp);
+}
+///큐에 파일을 넣는다
+void Application::FilePushQue(FileType* temp)
+{
+	fil.AddQ(temp);
+}
+
 
 
 
@@ -269,15 +306,16 @@ void Application:: DisplayThisfolder()
 		root.DisplayNameOnScreen();
 		root.DisplayDataOnScreen();
 		root.DisplayFolderNumberOnScreen();
+		root.DisplayFileNumberOnScreen();
 	}
 }
 
 void Application::DisplayCurrentFolder() 
 {
-	for (int i = 0; i < cnt; i++)
-	{
-		cout << "\t    " << queue[i] << endl;
-	}
+	cout << "\t--- Current Folder List ---" << endl;
+	fol.PrintQ();
+	cout << "\t--- Current File List ---" << endl;
+	fil.PrintQ();
 }
 
 void Application::Replace()
@@ -294,23 +332,21 @@ void Application::Replace()
 
 void Application::AddStack(FolderType* temp)
 {
-	stack[stacknum] = temp;
-	stacknum++;
-	frontnum = stacknum;
+	back.AddStack(temp);
 }
 
 void Application::PopStack()
 {
-	stacknum--;
+	back.PopStack();
 }
 
 void Application::GoToBack()
 {
-	if (stacknum > 0)
+	if (back.GetIndex() > 0)
 	{
-		stack[stacknum] = cur_Folder;
 		PopStack();
-		cur_Folder = stack[stacknum];
+		cur_Folder = back.GoBack();
+		FolderPushQue(cur_Folder);
 	}
 	else
 	{
@@ -320,14 +356,13 @@ void Application::GoToBack()
 
 void Application::GoToFront()
 {
-	if (stacknum == frontnum)
+	if (back.CantGoFront())
 	{
 		cout << "\t앞으로 갈곳이 없습니다." << endl;
 	}
 	else 
 	{
-		stacknum++;
-		cur_Folder = stack[stacknum];
+		cur_Folder = back.GoFront();
 	}
 }
 
@@ -336,6 +371,7 @@ void Application::GoToAddress()
 	FolderType* temp = cur_Folder;
 	adnum = 0;
 	string address;
+	cout << "\t가고싶은 경로: ";
 	cin >> address;
 	ad[0] = "";
 	for (int i = 0; i < address.length(); i++)
@@ -350,6 +386,7 @@ void Application::GoToAddress()
 			ad[adnum] = ad[adnum] + address[i];
 		}
 	}
+	adnum++;
 	cur_Folder = &root;
 	for (int i = 1; i < adnum; i++)
 	{
@@ -366,6 +403,6 @@ void Application::GoToAddress()
 			return;
 		}
 	}
-	AddStack(temp);
-	push(cur_Folder->GetName());
+	AddStack(cur_Folder);
+	FolderPushQue(cur_Folder);
 }

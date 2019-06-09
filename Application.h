@@ -7,6 +7,8 @@
 using namespace std;
 
 #include "FolderType.h"
+#include "Stack.h"
+#include "Queue.h"
 #define MAXFOLDERSIZE 5 
 
 /**
@@ -20,14 +22,13 @@ public:
 	*/
 	Application()
 	{
-		cnt = 0;
 		m_Command = 0;
 		root.SetAddress("root");
 		root.SetName("rootfolder");
 		cur_Folder = &root;
-		stacknum = 0;
-		frontnum = 0;
+		back.AddStack(cur_Folder);
 		adnum = 0;
+		copy = NULL;
 	}
 	
 	/**
@@ -151,40 +152,32 @@ public:
 	*/
 
 	FolderType*	GoToUpFolder();
-	/**
-	*	@brief  큐가 비었는지 확인
-	*	@pre	none.
-	*	@post	none.
-	*	@return 비었으면 1리턴.
-	*/
-	bool isEmpty() 
-	{
-		return !cnt;
-	};
-	/**
-	*	@brief  큐가 꽉찼는지 확인
-	*	@pre	none.
-	*	@post	none.
-	*	@return 꽉찼으면 1리턴.
-	*/
-	bool isFull() 
-	{
-		return cnt == MAXFOLDERSIZE;
-	};
+	
+
+
+	void CopyFolder();
+
+	void CutFolder();
+
+	void PasteFolder();
+
 
 	/**
-	*	@brief  큐에 집어넣는다.
+	*	@brief  큐에 폴더를 집어넣는다.
 	*	@pre	none.
 	*	@post	큐가 채워진다.
 	*	@pram   temp 집어넣는것.
 	*/
-	void push(string temp);
+	void FolderPushQue(FolderType* temp);
+
 	/**
-	*	@brief  큐에서 뺀다.
+	*	@brief  큐에 파일을 집어넣는다.
 	*	@pre	none.
-	*	@post	큐에서 하나가 사라진다..
+	*	@post	큐가 채워진다.
+	*	@pram   temp 집어넣는것.
 	*/
-	void pop();
+	void FilePushQue(FileType* temp);
+	
 
 	/**
 	*	@brief  최근열어본 폴더를 보여준다.
@@ -237,14 +230,13 @@ public:
 private:
 	FolderType root;				///< root folder.
 	FolderType* cur_Folder;			///< curent folder.
-	string queue[MAXFOLDERSIZE];	///< 최근 열어본폴더의 주소배열
-	int cnt;						///< 큐의 갯수
 	int m_Command;					///< current command number.
-	FolderType* stack[100];			///< 뒤로가기 기능
-	int stacknum;					///< 스택의 갯수
-	int frontnum;					///< 앞으로 가기 기능때 필요한수
+	Stack back;						///< 뒤로가기 기능을 위한 스택
+	Queue<FolderType> fol;			///< 최근 열어본 폴더를 위한 큐
+	Queue<FileType> fil;			///< 최근 열어본 파일을 위한 큐
 	string ad[100];					///< 입력한 주소 자르고 넣은거
 	int adnum;						///< 들어갈 주소의 갯수
+	FolderType* copy;
 };
 
 #endif	// _APPLICATION_H
