@@ -273,6 +273,7 @@ bool SortedLinkedList<T>::IsFull()
 template<class T>
 int SortedLinkedList<T>::Add(T& inData)
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	ResetList();
 	if (!IsFull())
 	{
@@ -306,7 +307,9 @@ int SortedLinkedList<T>::Add(T& inData)
 				}
 				else if (test == 2)
 				{
-					cout << "\t중복된 이름이 있습니다." << endl;
+					SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+					cout << "\t중복된 이름이 있습니다." << endl << endl;
+					SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 					return 0;
 				}
 				else if (cur_pointer->next == NULL)
@@ -410,9 +413,12 @@ int SortedLinkedList<T>::Delete(T data)
 template<class T>
 int SortedLinkedList<T>::Replace(T data)
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (Get(data)!=NULL)	//이름이 일치하는 파일을 발견한다면(1)
 	{
-		cout << "\t바꿀 이름" << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		cout << "\t이름을 바꾸십시오." << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 		cur_pointer->info.SetNameFromKB();
 		
 

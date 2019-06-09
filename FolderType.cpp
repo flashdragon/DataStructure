@@ -17,6 +17,7 @@ FolderType::FolderType(FolderType& data)
 	else
 		this->filelist = NULL;
 }
+
 FolderType& FolderType::operator=(const FolderType& data)
 {
 	this->mName = data.mName;
@@ -49,8 +50,11 @@ void FolderType::GenCreateTime()
 // Set folder name from keyboard.
 void FolderType::SetNameFromKB()
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 	cout << "\tName : ";
 	cin >> mName;
+	SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 }
 
 // Set folder Data from keyboard.
@@ -74,9 +78,14 @@ int FolderType::AddFolder()
 	/*getFolderTypeFromkeyboard*/
 	FolderType temp;
 	setFolderTypeProperty(temp);
+	cout << endl;
 	if (temp.mName.find('/') != -1)
 	{
+		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
 		cout << "\t이름에 \'/\'를 쓸 수 없습니다" << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 		return 0;
 	}
 	//파일 추가에 성공하면 서브파일 갯수를 1증가하고 1을 리턴, 아니면 0을 리턴
@@ -89,6 +98,8 @@ int FolderType::AddFolder()
 }
 int FolderType::AddFile()
 {
+	system("cls");
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	//서브 파일이 없으면 배열을 할당
 	if (subFileNum == 0)
 	{
@@ -98,54 +109,73 @@ int FolderType::AddFile()
 	/*getFolderTypeFromkeyboard*/
 	FileType temp;
 	temp.setFileTypeProperty();
+	cout << endl;
 	if (temp.GetName().find('/') != -1)
 	{
-		cout << "\t이름에 \'/\'를 쓸 수 없습니다" << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+		cout << "\t이름에 \'/\'를 쓸 수 없습니다" << endl << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 		return 0;
 	}
 	//파일 추가에 성공하면 서브파일 갯수를 1증가하고 1을 리턴, 아니면 0을 리턴
 	if (filelist->Add(temp))
 	{
 		subFileNum++;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_BLUE);
+		cout << "\t=======================\n";
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+		cout << "\t\tComplete...\n";
+		system("pause");
 		return 1;
 	}
+	SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+	cout << "\wFail..." << endl;
+	SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 	return 0;
 }
 
 //파일 삭제
 int FolderType::DeleteFolder(FolderType temp)
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	int pre = down->GetLength();
 	down->Delete(temp);
 	if (pre > down->GetLength()) //이전 item개수보다 현재 item개수가 많아지면 제거성공
 	{
 		subFolderNum--;
-		cout << "<========DELETE SUCCESS !===========>" << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_BLUE);
+		cout << "\t=======================\n";
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+		cout << "\t\tComplete...\n";
+		system("pause");
 		return 1;
 	}
-
+	SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
 	cout << "<========DELETE FAIL !=======>" << endl;
+	SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+	system("pause");
 	return 0;
 }
 
-int FolderType::DeleteFile()
+int FolderType::DelFile(FileType temp)
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	int pre = filelist->GetLength();
-	FileType temp;
-	string a;
-	string name;
-	cout << "\tname:";
-	cin >> name;
-	temp.SetName(name);
 	filelist->Delete(temp);
 	if (pre > filelist->GetLength()) //이전 item개수보다 현재 item개수가 많아지면 제거성공
 	{
 		subFileNum--;
-		cout << "<========DELETE SUCCESS !===========>" << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_BLUE);
+		cout << "\t=======================\n";
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+		cout << "\t\tComplete...\n";
+		system("pause");
 		return 1;
 	}
-
+	SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
 	cout << "<========DELETE FAIL !=======>" << endl;
+	SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+	system("pause");
 	return 0;
 }
 
@@ -178,6 +208,7 @@ int FolderType::ReplaceFileName()
 //모든 파일 출력
 void FolderType::DisplayProperty()
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (subFolderNum == 0)
 	{
 		return;
@@ -187,13 +218,16 @@ void FolderType::DisplayProperty()
 	down->ResetList();
 	while (down->GetNextItem(data) != NULL)
 	{
-		cout << "\t";
-		data.DisplayNameOnScreen();
+		data.DisplayRecordOnScreen();
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_BLUE);
+		cout << "\t=======================" << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 	}
 }
 
 void FolderType::Displayfile()
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (subFileNum == 0)
 	{
 		return;
@@ -203,14 +237,17 @@ void FolderType::Displayfile()
 	filelist->ResetList();
 	while (filelist->GetNextItem(file) != NULL)
 	{
-		cout << "\t";
-		file.DisplayNameOnScreen();
+		file.DisplayRecordOnScreen();
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_BLUE);
+		cout << "\t=======================" << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 	}
 }
 
 //이름으로 파일을 찾아서 출력한다.
 int FolderType::SearchListByMemberName(FolderType &inData)
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	FolderType tmp;
 	if (subFolderNum == 0)
 	{
@@ -223,6 +260,9 @@ int FolderType::SearchListByMemberName(FolderType &inData)
 		{
 			
 			tmp.DisplayRecordOnScreen();
+			SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_BLUE);
+			cout << "\t=======================\n";
+			SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 			result = 1;	//성공(1)
 		}
 		tmp.SearchListByMemberName(inData);
@@ -233,6 +273,7 @@ int FolderType::SearchListByMemberName(FolderType &inData)
 
 int FolderType::SearchFileByMemberName(FolderType &inData)
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	FileType tmp;
 	if (subFileNum == 0)
 	{
@@ -245,6 +286,9 @@ int FolderType::SearchFileByMemberName(FolderType &inData)
 		{
 
 			tmp.DisplayRecordOnScreen();
+			SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_BLUE);
+			cout << "\t=======================\n";
+			SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 			result = 1;	//성공(1)
 		}
 	}
@@ -278,7 +322,7 @@ FolderType* FolderType::Open(FolderType temp)
 
 FileType* FolderType::openfile()
 {
-	FileType* temp = NULL;
+	FileType* temp = new FileType;
 	temp->SetFileNameFromKB();
 	if (filelist->Openfile(*temp))
 	{
@@ -298,6 +342,15 @@ FolderType* FolderType::getFolderPointer(FolderType& temp)
 	return down->Get(temp);
 }
 
+//FileList의 GetPointer함수 실행
+FileType* FolderType::getFilePointer(FileType& data)
+{
+	if (filelist == NULL)
+	{
+		return NULL;
+	}
+	return filelist->Get(data);
+}
 
 void FolderType::SetParent(FolderType* temp)
 {
@@ -307,12 +360,16 @@ void FolderType::SetParent(FolderType* temp)
 
 int FolderType::Paste(FolderType* temp)
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	//서브 파일이 없으면 배열을 할당
 	if (subFolderNum == 0)
 	{
 		down = new SortedLinkedList<FolderType>;
 	}
+	SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 	cout << "\t복사한 폴더의 이름을 정하세요" << endl;
+	SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+
 	temp->SetParent(this);
 	temp->SetNameFromKB();
 	temp->SetAddress(m_fAddress + "/" + temp->GetName());
@@ -320,6 +377,28 @@ int FolderType::Paste(FolderType* temp)
 	if (down->Add(*temp))
 	{
 		subFolderNum++;
+		return 1;
+	}
+	return 0;
+}
+
+int FolderType::PasteFile(FileType* temp)
+{
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	//서브 파일이 없으면 배열을 할당
+	if (subFileNum == 0)
+	{
+		filelist = new SortedLinkedList<FileType>;
+	}
+	SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << "\t복사한 파일의 이름을 정하세요" << endl;
+	SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+	temp->SetNameFromKB();
+	temp->SetAddress(m_fAddress + "/" + temp->GetName());
+	temp->GenCreateTime();
+	if (filelist->Add(*temp))
+	{
+		subFileNum++;
 		return 1;
 	}
 	return 0;

@@ -9,6 +9,8 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include <conio.h>
+#include <Windows.h>
 
 #include"SortedLinkedList.h"
 #include"FileType.h"
@@ -125,6 +127,16 @@ public:
 		return subFolderNum;
 	}
 
+	/**
+	*	@brief	Get file number
+	*	@pre	file number is set.
+	*	@post	none.
+	*	@return	file number.
+	*/
+	int GetFileNumber()
+	{
+		return subFileNum;
+	}
 	/**
 	*	@brief	모든 정보를 넣는다.
 	*	@pre	none.
@@ -264,7 +276,6 @@ public:
 	{
 		DisplayNameOnScreen();
 		parent->DisplayAddressOnScreen();
-		DisplayDataOnScreen();
 		DisplayDateOnScreen();
 		DisplayFolderNumberOnScreen();
 		DisplayFileNumberOnScreen();
@@ -318,7 +329,7 @@ public:
 	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
 	*/
 
-	int DeleteFile();
+	int DelFile(FileType temp);
 
 	/**
 	*	@brief	리스트에서 해당 이름를 가진 폴더를 찾아 이름을 바꾼다.
@@ -412,11 +423,17 @@ public:
 
 	FolderType* getFolderPointer(FolderType& temp);
 
+	FileType* getFilePointer(FileType& data);
+
 	void SetParent(FolderType* temp);
 
 
 
 	int Paste(FolderType* temp);
+
+	int PasteFile(FileType* temp);
+
+
 
 
 protected:

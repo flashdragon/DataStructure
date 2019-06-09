@@ -5,6 +5,8 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include <conio.h>
+#include <Windows.h>
 
 #include"SortedLinkedList.h"
 
@@ -19,7 +21,11 @@ public:
 	*/
 	FileType()
 	{
-		data = 0;
+		mName = ""; 
+		m_fAddress = "";
+		date="";
+		indata="";
+		kind = "0";
 	}
 
 	/**
@@ -29,6 +35,13 @@ public:
 	{
 
 	}
+
+	//복사생성자
+	FileType(FileType& data);
+
+	//대입연산자
+	FileType& operator= (const FileType& data);
+
 	/**
 	*	@brief	Get file name.
 	*	@pre	file name is set.
@@ -51,16 +64,6 @@ public:
 		return m_fAddress;
 	}
 
-	/**
-	*	@brief	Get file data
-	*	@pre	file data is set.
-	*	@post	none.
-	*	@return	file data.
-	*/
-	int GetData()
-	{
-		return data;
-	}
 
 	/**
 	*	@brief	Get file date
@@ -95,16 +98,6 @@ public:
 		mName = inName;
 	}
 
-	/**
-	*	@brief	Set file DATA.
-	*	@pre	none.
-	*	@post	file name is set.
-	*	@param	inName	file name.
-	*/
-	void SetData(int indata)
-	{
-		data = indata;
-	}
 	/**
 	*	@brief	Set file address.
 	*	@pre	none.
@@ -165,16 +158,6 @@ public:
 	*	@pre	file address is set.
 	*	@post	file address is on screen.
 	*/
-	void DisplayDataOnScreen()
-	{
-		cout << "\tData : " << data << endl;
-	};
-
-	/**
-	*	@brief	Display file address on screen.
-	*	@pre	file address is set.
-	*	@post	file address is on screen.
-	*/
 	void DisplayDateOnScreen()
 	{
 		cout << "\tDate : " << date << endl;
@@ -188,7 +171,6 @@ public:
 	void DisplayRecordOnScreen()
 	{
 		DisplayNameOnScreen();
-		DisplayDataOnScreen();
 		DisplayDateOnScreen();
 	};
 
@@ -206,12 +188,6 @@ public:
 	*/
 	void SetFileNameFromKB();
 
-	/**
-	*	@brief	Set file name from keyboard.
-	*	@pre	none.
-	*	@post	file name is set.
-	*/
-	void SetDataFromKB();
 
 
 
@@ -235,8 +211,8 @@ public:
 protected:
 	string mName;					///< file name.
 	string m_fAddress;				///< file address.
-	int data;						///< file data.
 	string date;					///< file date.
 	string indata;					///< 파일의 안에 내용
+	string kind;
 
 };

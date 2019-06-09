@@ -1,5 +1,17 @@
 ﻿  Application.cpp
+C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\Application.h(259,17): warning C4838:  'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\Application.h(259,20): warning C4838:  'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+  FileType.cpp
+C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\Application.cpp(971,20): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\FileType.cpp(26,1): warning C4996:  'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  FolderType.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\time.h(506): message :  'localtime' 선언을 참조하십시오.
+C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\FolderType.cpp(45,1): warning C4996:  'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\time.h(506): message :  'localtime' 선언을 참조하십시오.
+  Stack.cpp
   main.cpp
+C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\FolderType.cpp(132,10): warning C4129:  'w': 문자 이스케이프 시퀀스를 인식할 수 없습니다.
+C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\Application.h(259,17): warning C4838:  'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
   코드를 생성하고 있습니다...
-C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\Application.cpp(377,20): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\Application.h(259,20): warning C4838:  'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
   SortedArrayList.vcxproj -> C:\Users\김용재\Desktop\2019 공부\2019 자료구조\자료구조 프로젝트\DataStructure\Debug\SortedArrayList.exe

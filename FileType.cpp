@@ -1,6 +1,23 @@
 #include "FileType.h"
 #include "SortedLinkedList.h"
 
+FileType::FileType(FileType& data)
+{
+	this->mName = data.mName;
+	this->m_fAddress = data.m_fAddress;
+	this->date = data.date;
+	this->indata = data.indata;
+}
+
+FileType& FileType::operator=(const FileType& data)
+{
+	this->mName = data.mName;
+	this->m_fAddress = data.m_fAddress;
+	this->date = data.date;
+	this->indata = data.indata;
+	return (*this);
+}
+
 void FileType::GenCreateTime()
 {
 	time_t tt;
@@ -15,6 +32,8 @@ void FileType::GenCreateTime()
 // Set file name from keyboard.
 void FileType::SetNameFromKB()
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 	string a;
 	cout << "\tName : ";
 	cin >> a;
@@ -22,41 +41,59 @@ void FileType::SetNameFromKB()
 	infile.open(a + ".txt");
 	SetName(a + ".txt");
 	infile.close();
+	SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+
 }
 
 // Set file name from keyboard.
 void FileType::SetFileNameFromKB()
 {
-	string a;
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	
 	cout << "\tName : ";
-	cin >> a;
-	SetName(a);
+	cin >> mName;
+	SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+
 }
 
-// Set file Data from keyboard.
-void FileType::SetDataFromKB()
-{
-	cout << "\tData : ";
-	cin >> data;
-}
 
 // Compare two FileTypes.
 void FileType::Open()
 {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	string a="";
 	ofstream output;
 	output.open(this->mName);
+	cout << "\n\n";
 	while (1)
 	{
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+		cout << "\t종료할려면: \"Exit\"\n";
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 		cout << "\t입력할 내용: ";
 		cin >> a;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 		if (a == "Exit")
 		{
 			break;
 		}
 		output << a;
 		output << "\n";
-		cout << "\t종료할려면: \"Exit\"\n";
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		cout << "\t입력할 내용: ";
+		cin >> a;
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+		if (a == "Exit")
+		{
+			break;
+		}
+		output << a;
+		output << "\n";
+		system("pause");
+		system("cls");
+		cout << "\n\n";
 	}
 	output.close();
 }

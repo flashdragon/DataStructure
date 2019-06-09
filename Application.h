@@ -4,6 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <conio.h>
+#include <Windows.h>
+
 using namespace std;
 
 #include "FolderType.h"
@@ -50,6 +53,21 @@ public:
 	*	@return	user's command.
 	*/
 	int GetCommand();
+
+
+	void RunFolder();
+
+	int GetFolderCommand();
+
+	void RunFile();
+
+	int GetFileCommand();
+
+	void RunMove();
+
+	int GetMoveCommand();
+
+	
 
 	/**
 	*	@brief	Add new record into list.
@@ -118,7 +136,7 @@ public:
 	*	@post	리스트에 해당 파일을 제거한다.
 	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
 	*/
-	int DeleteFile();
+	int DelFile();
 
 	/**
 	*	@brief	리스트에서 해당 이름을 가진 파일을 찾아 제거한다.
@@ -126,7 +144,7 @@ public:
 	*	@post	리스트에 해당 파일을 제거한다.
 	*	@return	성공시 1을 리턴, 실패시 0을 리턴.
 	*/
-	void ReplaceFile();
+	void ReFile();
 
 	/**
 	*	@brief	리스트에서 해당 이름을 가진 파일을 찾아 제거한다.
@@ -157,10 +175,18 @@ public:
 
 	void CopyFolder();
 
+
+
 	void CutFolder();
 
 	void PasteFolder();
 
+
+	void CopFile();
+
+	void CutFile();
+
+	void PasteFile();
 
 	/**
 	*	@brief  큐에 폴더를 집어넣는다.
@@ -227,16 +253,27 @@ public:
 	*/
 	void GoToAddress();
 
+
+	void gotoxy(int x, int y)
+	{
+		COORD Pos = { x, y };
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+	}
+
 private:
 	FolderType root;				///< root folder.
 	FolderType* cur_Folder;			///< curent folder.
 	int m_Command;					///< current command number.
+	int Folder_Command;
+	int File_Command;
+	int Move_Command;
 	Stack back;						///< 뒤로가기 기능을 위한 스택
 	Queue<FolderType> fol;			///< 최근 열어본 폴더를 위한 큐
 	Queue<FileType> fil;			///< 최근 열어본 파일을 위한 큐
 	string ad[100];					///< 입력한 주소 자르고 넣은거
 	int adnum;						///< 들어갈 주소의 갯수
 	FolderType* copy;
+	FileType* copyfile;
 };
 
 #endif	// _APPLICATION_H
